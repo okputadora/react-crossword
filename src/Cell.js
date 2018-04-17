@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import styles from './styles'
-class Cell extends Component {
-  render(){
-    var currentStyle = styles.whiteCell
-    if (this.props.value === '#'){
-      var currentStyle = styles.blackCell
-    }
-    return(
-      <div className="cell" style={currentStyle}></div>
-    )
+import React from 'react'
+const Cell = (props) => {
+  const bColor = props.color;
+  const style = {
+    height: "40px",
+    width: "40px",
+    backgroundColor: bColor,
+    border: "1px solid black"
   }
+  return(
+    <div className="cell" style={style} id={props.id}></div>
+  )
 }
 
 export default Cell
