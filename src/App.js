@@ -8,6 +8,9 @@ class App extends Component {
     currentWord: [],
     directionAcross: true
   }
+  componentWillMount(){
+    this.findCurrentWord(0);
+  }
   findCurrentWord = (id) => {
     const currentWord = [id]
     let searchForEnd = true;
@@ -35,21 +38,42 @@ class App extends Component {
     }
   }
 
-  changeCurrentSquare = (event) => {
-    console.log("click")
-    // this is the current square
-    this.findCurrentWord(event.target.id)
+  moveFocus = (id) => {
+    this.findCurrentWord(id)
     this.setState({
-      currentSquare: parseInt(event.target.id)
+      currentSquare: parseInt(id)
     })
+  }
+
+  squareClickHandler = (event) => {
+    // this is the current square
+    let id = event.target.id
+    this.moveFocus(id)
+  }
+
+  keyPressHandler = (event) => {
+    // add to board in state
+    if (this.state.directionAcross){
+      // find the next blank square
+      let id = parseInt(event.target.id);
+      let squareBlank = false;
+      while (squareBlank === false){
+        id++
+        if (this.state.board.charAt(id) !== "#"){
+          this.moveFocus(id)
+          squareBlank = true
+        }
+      }
+    }
   }
   render() {
     const rows = this.state.board.split("").map((value, index) => {
       let color = "black"
       let clickHandler;
-      if (value === "_"){
+      if (value !== "#"){
         color = "white";
-        clickHandler = (event) => this.changeCurrentSquare(event)
+        // only add click handlers to white squares
+        clickHandler = (event) => this.squareClickHandler(event)
       }
       // highlight current word
       if (this.state.currentWord.indexOf(index) !== -1){
@@ -57,14 +81,18 @@ class App extends Component {
       }
 
       // highlight current box
+      let inFocus = false;
       if (index === this.state.currentSquare){
         color = "#FFE04D"
+        inFocus = true;
       }
       return (
         <Cell
           color={color}
           id={index} key={index}
           click={clickHandler}
+          inFocus={inFocus}
+          keyPress={(event) => this.keyPressHandler(event)}
         />
       )
     })

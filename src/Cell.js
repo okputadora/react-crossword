@@ -1,15 +1,36 @@
-import React from 'react'
-const Cell = (props) => {
-  const bColor = props.color;
-  const style = {
-    height: "40px",
-    width: "40px",
-    backgroundColor: bColor,
-    border: "1px solid black"
+import React, { Component } from 'react'
+class Cell extends Component{
+  componentDidMount(){
+    if (this.props.inFocus){
+      console.log("element in focus = ",this.props.id)
+      this.nameInput.focus()
+    }
   }
-  return(
-    <div className="cell" style={style} id={props.id} onClick={props.click}></div>
-  )
+  componentDidUpdate(prevProps, prevState, prevContect){
+    if (this.props.inFocus){
+      console.log("element in focus = ",this.props.id)
+      this.nameInput.focus()
+    }
+  }
+
+  render(){
+    const bColor = this.props.color;
+    const style = {
+      height: "40px",
+      width: "40px",
+      backgroundColor: bColor,
+      border: "1px solid black",
+      textAlign: "center",
+      fontSize: "1.5em",
+      textTransform: 'uppercase'
+    }
+    return(
+      <input className="cell" type="text" style={style} id={this.props.id}
+        onClick={this.props.click} onKeyUp={this.props.keyPress} ref={this.props.focus}
+        ref={(input) => {this.nameInput = input}}
+      />
+      )
+  }
 }
 
 export default Cell
