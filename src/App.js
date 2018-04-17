@@ -3,11 +3,12 @@ import './App.css';
 import Cell from './Cell'
 class App extends Component {
   state = {
-    board: "___#____#_____",
+    board: ["___#____#_____", "___#____#_____", "___#____#_____"],
     currentSquare: 0,
     currentWord: [],
     directionAcross: true
   }
+  boardWidth = this.state.board[0].length;
   componentWillMount(){
     this.findCurrentWord(0);
   }
@@ -69,42 +70,54 @@ class App extends Component {
         }
       }
     }
+    // if we're going down we need to change id + 1 + the width of the grid
+    else if (!this.state.directionAcross){
+
+    }
   }
   render() {
-    const rows = this.state.board.split("").map((value, index) => {
-      let color = "black"
-      let clickHandler;
-      if (value !== "#"){
-        color = "white";
-        // only add click handlers to white squares
-        clickHandler = (event) => this.squareClickHandler(event)
-      }
-      // highlight current word
-      if (this.state.currentWord.indexOf(index) !== -1){
-        color = "lightblue"
-      }
+    const rows = []
+    let masterIndex = -1;
+    this.state.board.forEach((row, rowIndex) => {
+      let squares = row.split("").map((square, squareIndex) => {
+        masterIndex++
+        let color = "black"
+        let clickHandler;
+        if (square !== "#"){
+          color = "white";
+          // only add click handlers to white squares
+          clickHandler = (event) => this.squareClickHandler(event)
+        }
+        // highlight current word
+        if (this.state.currentWord.indexOf(masterIndex) !== -1){
+          color = "lightblue"
+        }
 
-      // highlight current box
-      let inFocus = false;
-      if (index === this.state.currentSquare){
-        color = "#FFE04D"
-        inFocus = true;
-      }
-      return (
-        <Cell
-          color={color}
-          id={index} key={index}
-          click={clickHandler}
-          inFocus={inFocus}
-          keyPress={(event) => this.keyPressHandler(event)}
-        />
-      )
+        // highlight current box
+        let inFocus = false;
+        if (masterIndex === this.state.currentSquare){
+          color = "#FFE04D"
+          inFocus = true;
+        }
+        return (
+          <Cell
+            color={color}
+            id={masterIndex} key={masterIndex}
+            click={clickHandler}
+            inFocus={inFocus}
+            keyPress={(event) => this.keyPressHandler(event)}
+          />
+        )
+      })
+        let newRow = <div style={{display: "flex"}}>{squares}</div>
+        rows.push(newRow)
+        masterIndex++
     })
     return (
       <div className="container">
         <div className="d-flex align-items-center justify-content-center" style={{height: "100vh"}}>
           <div className="grid d-flex flex-column">
-            <div style={{display: "flex"}}>
+            <div>
               {rows}
             </div>
           </div>
