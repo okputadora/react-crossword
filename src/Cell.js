@@ -9,6 +9,7 @@ class Cell extends Component{
   componentDidUpdate(prevProps, prevState, prevContect){
     if (this.props.inFocus){
       console.log("element in focus = ",this.props.id)
+      // this.nameInput is undefined in the render context so I'm doing it here
       this.nameInput.focus()
     }
   }

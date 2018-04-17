@@ -53,15 +53,19 @@ class App extends Component {
 
   keyPressHandler = (event) => {
     // add to board in state
+    console.log(event.keyCode)
     if (this.state.directionAcross){
-      // find the next blank square
-      let id = parseInt(event.target.id);
-      let squareBlank = false;
-      while (squareBlank === false){
-        id++
-        if (this.state.board.charAt(id) !== "#"){
-          this.moveFocus(id)
-          squareBlank = true
+      // if spacebar or letter
+      if (event.keyCode === 32 || (event.keyCode < 91 && event.keyCode > 64)){
+        // find the next blank square
+        let id = parseInt(event.target.id);
+        let squareBlank = false;
+        while (squareBlank === false){
+          id++
+          if (this.state.board.charAt(id) !== "#"){
+            this.moveFocus(id)
+            squareBlank = true
+          }
         }
       }
     }
