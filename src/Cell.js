@@ -8,7 +8,7 @@ const Cell = (props) => {
     border: "1px solid black"
   }
   return(
-    <div className="cell" style={style} id={props.id}></div>
+    <div className="cell" style={style} id={props.id} onClick={props.click}></div>
   )
 }
 
